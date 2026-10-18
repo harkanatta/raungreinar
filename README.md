@@ -54,8 +54,6 @@ Each exercise part can be:
 - plain: a question with a **Sýna svar** button
 - true/false (or Já/Nei, …): two buttons that say right away if the answer is right
 - **multiple choice**: options A, B, C… that say right away if the answer is right
-- **draw the arrow**: the student taps or drags on the squared grid (or uses the arrow keys) to place an arrowhead,
-  then presses **Athuga**; the app says how many squares their arrow goes (used in kafli 3, Spurning 1–2)
 - **number answer**: the student types a number and presses **Athuga** or Enter. Accepted: `9,8` or `9.8`,
   `2,0·10^5` or `2e5`, and anything that rounds to the book's answer or is within 2 %. If only the sign is
   wrong the app says so ("athugaðu stefnuna").
@@ -116,7 +114,6 @@ exercises: [
       num('Question', 9.8, 'm/s^2', 'explanation'),                              // value with a point
       num('Question', -1.9, 'm/s^2', '', { sign: false, shown: '−1,9' }),        // either sign is OK
       num('Question', 2.0e5, 'N', '', { tol: 0.03, shown: '2,0·10^5' })          // own tolerance
-      drag('Question', { cols: 16, rows: 14, arrows: [...] }, [8, 7], [13, 9], ['F', 'heild'], 'answer')  // draw from [8,7] to [13,9]
     ]) })
 ]
 ```

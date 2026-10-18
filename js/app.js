@@ -92,7 +92,6 @@
   }
 
   function renderExercise() {
-    tips = {};
     const ch = state.ch, e = ch.exercises[state.idx], last = state.idx === ch.exercises.length - 1;
     const nextCh = chapters[chapters.indexOf(ch) + 1], prevCh = chapters[chapters.indexOf(ch) - 1];
     store.set('last_' + ch.n, state.idx); store.set('lastCh', ch.n);
@@ -116,12 +115,6 @@
           btns = `<div class="row"><button class="btn tf" data-i="${i}" data-v="1">${p.labels[0]}</button><button class="btn tf" data-i="${i}" data-v="0">${p.labels[1]}</button>${show}</div>`;
         else if (p.mc)
           btns = `<div class="mclist">${p.mc.map((o, k) => `<button class="btn mc" data-i="${i}" data-k="${k}"><span class="k">${LETTERS[k].toUpperCase()}</span>${o}</button>`).join('')}</div><div class="row">${show}</div>`;
-        else if (p.drag)
-          btns = `<p class="mine">Ýttu á reit eða dragðu til að setja örvaroddinn. Örvatakkar virka líka.</p>
-            <div class="dragwrap" id="dw${i}" data-i="${i}" tabindex="0" role="application" aria-label="Teiknaðu örina">${dragSvg(p, p.drag.start)}</div>
-            <div class="numrow"><span class="fb" id="pos${i}" aria-live="polite">Örin þín: ${vecWords(p.drag.start, p.drag.start)}</span>
-            <button class="btn dcheck" data-i="${i}">Athuga</button><button class="btn dreset" data-i="${i}">Byrja upp á nýtt</button>${show}
-            <span class="fb" id="fb${i}" aria-live="polite"></span></div>`;
         else if (p.num !== undefined)
           btns = `<div class="numrow"><input id="in${i}" inputmode="decimal" autocomplete="off" aria-label="Svar${p.unit ? ' í ' + p.unit : ''}">${p.unit ? `<span class="unit">${up(p.unit)}</span>` : ''}
             <button class="btn check" data-i="${i}">Athuga</button>${show}<span class="fb" id="fb${i}" aria-live="polite"></span></div>`;
@@ -181,12 +174,6 @@
       b.insertAdjacentHTML('beforeend', `<span class="mark"> ${ok ? '✓ Rétt!' : '✗ Reyndu aftur'}</span>`);
       if (ok) { box.hidden = false; b.closest('li').querySelector('.show').textContent = 'Fela svar'; }
     } else if (b.classList.contains('check')) checkNum(i, p, box);
-    else if (b.classList.contains('dcheck')) {
-      const t = tips[i] || p.drag.start, ok = t[0] === p.drag.target[0] && t[1] === p.drag.target[1], fb = $('fb' + i);
-      fb.className = 'fb ' + (ok ? 'right' : 'wrong');
-      fb.textContent = ok ? '✓ Rétt!' : `✗ Ekki alveg – örin þín fer ${vecWords(p.drag.start, t)}. Reyndu aftur.`;
-      if (ok) { box.hidden = false; b.parentElement.querySelector('.show').textContent = 'Fela svar'; }
-    } else if (b.classList.contains('dreset')) setTip(i, p, p.drag.start);
   });
 
   /* Number answers: accept comma or point, spaces, and a rounding tolerance */
@@ -205,42 +192,6 @@
     fb.textContent = ok ? '✓ Rétt!' : flipped ? '✗ Rétt stærð en rangt formerki – athugaðu stefnuna.' : '✗ Ekki alveg. Reyndu aftur.';
     if (ok) { box.hidden = false; box.closest('li').querySelector('.show').textContent = 'Fela svar'; }
   }
-  /* ---------- draw-the-arrow parts ---------- */
-  let tips = {};   // part index → current arrowhead [x, y]
-  function dragSvg(p, tip) {
-    const d = p.drag, f = d.fig;
-    return vecfig({ ...f, handle: tip, arrows: [...(f.arrows || []), { from: d.start, to: tip, l: d.l, s: d.s, you: true }] });
-  }
-  function setTip(i, p, tip) {
-    const f = p.drag.fig;
-    tip = [Math.max(0, Math.min(f.cols, tip[0])), Math.max(0, Math.min(f.rows, tip[1]))];
-    tips[i] = tip;
-    $('dw' + i).innerHTML = dragSvg(p, tip);
-    $('pos' + i).textContent = 'Örin þín: ' + vecWords(p.drag.start, tip);
-    $('fb' + i).textContent = '';
-  }
-  function tipFromPointer(ev, wrap, p) {
-    const r = wrap.querySelector('svg').getBoundingClientRect(), f = p.drag.fig;
-    const x = (ev.clientX - r.left) / r.width * (f.cols * 30 + 4) - 2, y = (ev.clientY - r.top) / r.height * (f.rows * 30 + 4) - 2;
-    return [Math.round(x / 30), Math.round(y / 30)];
-  }
-  main.addEventListener('pointerdown', ev => {
-    const wrap = ev.target.closest('.dragwrap'); if (!wrap) return;
-    const i = +wrap.dataset.i, p = state.ch.exercises[state.idx].p[i];
-    ev.preventDefault(); wrap.setPointerCapture(ev.pointerId); wrap.focus({ preventScroll: true });
-    setTip(i, p, tipFromPointer(ev, wrap, p));
-    const move = e => setTip(i, p, tipFromPointer(e, wrap, p));
-    const up = () => { wrap.removeEventListener('pointermove', move); wrap.removeEventListener('pointerup', up); wrap.removeEventListener('pointercancel', up); };
-    wrap.addEventListener('pointermove', move); wrap.addEventListener('pointerup', up); wrap.addEventListener('pointercancel', up);
-  });
-  main.addEventListener('keydown', ev => {
-    const wrap = ev.target.closest && ev.target.closest('.dragwrap'); if (!wrap) return;
-    const k = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[ev.key]; if (!k) return;
-    ev.preventDefault();
-    const i = +wrap.dataset.i, p = state.ch.exercises[state.idx].p[i], t = tips[i] || p.drag.start;
-    setTip(i, p, [t[0] + k[0], t[1] + k[1]]);
-  });
-
   main.addEventListener('keydown', ev => {
     if (ev.key !== 'Enter' || !ev.target.id.startsWith('in')) return;
     const i = +ev.target.id.slice(2);
@@ -271,7 +222,7 @@
   $('themes').onclick = ev => { const b = ev.target.closest('button'); if (!b) return; theme = b.dataset.t; applySettings(); };
   document.addEventListener('keydown', e => {
     if (!$('menu').hidden) { if (e.key === 'Escape') closeMenu(); return; }
-    if (e.target.tagName === 'INPUT' || e.target.closest('.dragwrap')) return;
+    if (e.target.tagName === 'INPUT') return;
     if (e.key === 'ArrowRight') step(1);
     if (e.key === 'ArrowLeft') step(-1);
   });
