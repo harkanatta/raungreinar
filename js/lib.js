@@ -4,8 +4,17 @@
 /* ---------- the book registry ---------- */
 const Book = {
   chapters: [],
-  add(ch) { this.chapters.push(ch); this.chapters.sort((a, b) => a.n - b.n); }
+  formulas: '',   // the formula sheet, set in chapters/formulur.js
+  /* exercises without a number n are numbered 1, 2, 3, … in order (used in the address #/2/5) */
+  add(ch) {
+    ch.exercises.forEach((e, i) => { if (e.n === undefined) e.n = i + 1; });
+    this.chapters.push(ch); this.chapters.sort((a, b) => a.n - b.n);
+  }
 };
+
+/* Exercise named after the book's own numbering: SP(3, {...}) = 'Spurning 3', AE(3, {...}) = 'Æfing 3' */
+const SP = (k, e) => ({ t: `Spurning ${k}`, short: `S${k}`, ...e });
+const AE = (k, e) => ({ t: `Æfing ${k}`, short: `Æ${k}`, ...e });
 
 /* ---------- math formatting ---------- */
 
@@ -205,8 +214,90 @@ const IMG = (file, alt, caption) =>
 const mc = (q, options, right, why) =>
   ({ q, mc: options, c: right, a: `<b>${options[right]}</b>` + (why ? ' — ' + why : '') });
 
-/* Number answer the student types in: num(question, right value, unit, explanation, tolerance)
-   tolerance is relative, default 0.02 (2 %), so rounding differences still count as right.
-   Students may use a comma or a point: 9,8 or 9.8. */
-const num = (q, value, unit, why, tol = 0.02) =>
-  ({ q, num: value, unit: unit || '', tol, a: `<b>${U(String(value).replace('.', ','), unit)}</b>` + (why ? ' — ' + why : '') });
+/* Number answer the student types in: num(question, right value, unit, explanation, options)
+   options: { tol: 0.02 } relative tolerance (default 2 %, so rounding differences count as right),
+            { sign: false } accept the answer with either sign (when the direction is asked separately),
+            { shown: '2,0·10^5' } how the answer is written in the answer box (default: the value).
+   Students may type 9,8 or 9.8, and 2,0·10^5 or 2e5. */
+const num = (q, value, unit, why, o = {}) => {
+  const shown = o.shown || String(value).replace('.', ',');
+  // an answer that rounds to the book's answer also counts: 1,85 is right when the book says 1,9
+  const m = shown.replace(',', '.').replace('−', '-').match(/^-?\d+(?:\.(\d+))?(?:·10\^\{?(-?\d+)\}?)?$/);
+  const half = m ? 0.5 * Math.pow(10, -(m[1] || '').length + (+m[2] || 0)) : 0;
+  return { q, num: value, unit: unit || '', tol: o.tol ?? 0.02, half, sign: o.sign ?? true,
+    a: `<b>${U(shown, unit)}</b>` + (why ? ' — ' + why : '') };
+};
+
+/* ---------- physics figures (they follow the colour theme) ---------- */
+
+/* Vector label with a bar over the letter, as in the book: VL('F', 'heild') */
+const VL = (letter, sub) => `<span class="vec">${letter}</span>${sub ? `<sub>${sub}</sub>` : ''}`;
+
+/* Arrow head + line for SVG figures */
+function svgArrow(x1, y1, x2, y2, opt = {}) {
+  const ang = Math.atan2(y2 - y1, x2 - x1), L = opt.head || 16, W = L * 0.55;
+  const bx = x2 - L * Math.cos(ang), by = y2 - L * Math.sin(ang);
+  const p = (a, d) => `${(bx + d * Math.cos(a)).toFixed(1)},${(by + d * Math.sin(a)).toFixed(1)}`;
+  const col = opt.color || 'var(--accent)';
+  return `<line x1="${x1}" y1="${y1}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="${col}" stroke-width="${opt.w || 4}"${opt.dash ? ' stroke-dasharray="9 6"' : ''}/>` +
+    `<polygon points="${x2},${y2} ${p(ang + Math.PI / 2, W)} ${p(ang - Math.PI / 2, W)}" fill="${col}"/>`;
+}
+/* SVG text label for a vector: letter with a bar, optional subscript */
+function svgVecLabel(x, y, letter, sub, opt = {}) {
+  const sz = opt.size || 26, anchor = opt.anchor || 'middle';
+  return `<text x="${x}" y="${y}" font-size="${sz}" fill="currentColor" text-anchor="${anchor}" font-family="Georgia, serif">` +
+    `<tspan font-style="italic" text-decoration="overline">${letter}</tspan>` +
+    (sub ? `<tspan font-size="${sz * 0.65}" dy="6" font-family="inherit">${sub}</tspan>` : '') + `</text>`;
+}
+
+/* Force diagram on squared paper. Coordinates are grid squares, (0,0) top left, y downwards.
+   vecfig({ cols: 16, rows: 14, box: [6,5,4,4], dot: [8,7],
+            arrows: [{ from: [8,5], to: [10,3], l: 'T', at: [10.6,2.8] },
+                     { from: [8,7], to: [13,9], l: 'F', s: 'heild', ans: true }] })
+   ans: true draws the arrow dashed in the "right answer" colour. */
+function vecfig(o) {
+  const C = 30, W = o.cols * C, H = o.rows * C, X = v => v * C;
+  let s = `<svg class="fig" viewBox="-2 -2 ${W + 4} ${H + 4}" role="img" aria-label="${o.alt || 'Kraftamynd'}" style="max-width:${o.max || '26rem'}">`;
+  s += `<rect x="0" y="0" width="${W}" height="${H}" fill="var(--card)"/>`;
+  for (let i = 0; i <= o.cols; i++) s += `<line x1="${X(i)}" y1="0" x2="${X(i)}" y2="${H}" stroke="var(--grid)" stroke-width="1"/>`;
+  for (let j = 0; j <= o.rows; j++) s += `<line x1="0" y1="${X(j)}" x2="${W}" y2="${X(j)}" stroke="var(--grid)" stroke-width="1"/>`;
+  if (o.box) { const [x, y, w, h] = o.box; s += `<rect x="${X(x)}" y="${X(y)}" width="${X(w)}" height="${X(h)}" fill="var(--box)" stroke="currentColor" stroke-width="2"/>`; }
+  if (o.dot) s += `<circle cx="${X(o.dot[0])}" cy="${X(o.dot[1])}" r="5" fill="currentColor"/>`;
+  for (const a of o.arrows || []) {
+    s += svgArrow(X(a.from[0]), X(a.from[1]), X(a.to[0]), X(a.to[1]), a.ans ? { color: 'var(--good)', dash: true, w: 5 } : {});
+    if (a.l) { const [lx, ly] = a.at || [a.to[0] + 0.6, a.to[1] - 0.3]; s += svgVecLabel(X(lx), X(ly), a.l, a.s); }
+  }
+  return s + '</svg>';
+}
+
+/* Position axis with marked points and displacement arrows (like Mynd 2.2).
+   axisfig({ min: 0, max: 9, name: 'x (m)', pts: [[2, 'x₁ = 2 m'], [7, 'x₂ = 7 m']],
+             arrows: [[2, 7, 'Δx = 5 m']] }) */
+function axisfig(o) {
+  const W = 420, x0 = 20, x1 = 370, y = 70, X = v => x0 + (v - o.min) / (o.max - o.min) * (x1 - x0);
+  let s = `<svg class="fig" viewBox="0 0 ${W} 130" role="img" aria-label="${o.alt || 'Stöðuás'}">`;
+  s += svgArrow(4, y, 410, y, { color: 'currentColor', w: 2.5, head: 14 });
+  s += `<text x="410" y="${y - 14}" font-size="20" font-style="italic" fill="currentColor" text-anchor="end">${o.name}</text>`;
+  for (const [v, l] of o.pts || []) {
+    s += `<line x1="${X(v)}" y1="${y - 9}" x2="${X(v)}" y2="${y + 9}" stroke="currentColor" stroke-width="2.5"/>`;
+    s += `<text x="${X(v)}" y="${y + 34}" font-size="20" fill="currentColor" text-anchor="middle">${l}</text>`;
+  }
+  for (const [a, b, l] of o.arrows || []) {
+    s += svgArrow(X(a), y - 26, X(b), y - 26, { w: 4 });
+    s += `<text x="${(X(a) + X(b)) / 2}" y="${y - 38}" font-size="20" font-weight="700" fill="currentColor" text-anchor="middle">${l}</text>`;
+  }
+  return s + '</svg>';
+}
+
+/* Small arrow pointing in a direction, for multiple-choice options: AR(90) = up, AR(180) = left */
+const AR = (deg, label) => {
+  const r = deg * Math.PI / 180, cx = 30, cy = 30, d = 22;
+  const x1 = cx - d * Math.cos(r), y1 = cy + d * Math.sin(r), x2 = cx + d * Math.cos(r), y2 = cy - d * Math.sin(r);
+  return `<svg class="icon" viewBox="0 0 60 60" role="img" aria-label="${label || 'ör'}">${svgArrow(x1.toFixed(1), y1.toFixed(1), x2.toFixed(1), y2.toFixed(1), { color: 'currentColor', w: 5, head: 15 })}</svg>`;
+};
+
+/* Symbol with an upright word as subscript: MS('v', 'meðal') → v with "meðal" below, MS('F', 'g') */
+const MS = (base, sub) => `${M(base)}<sub>${sub}</sub>`;
+
+/* Marks an answer that is not in the book (written for the app – the teacher may want to check it) */
+const MINE = ' <span class="mine">(Svarið er ekki í bókinni.)</span>';

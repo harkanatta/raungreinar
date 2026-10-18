@@ -15,6 +15,10 @@
   let state = { ch: null, idx: 0, view: 'ex' };   // ch = chapter object, idx = exercise index
 
   const chByN = n => chapters.find(c => c.n === n);
+  /* names shown on screen: a chapter may have its own label (e.g. 'Upprifjun'),
+     an exercise its own title (e.g. 'Æfing 3') and a short name for the menu grid */
+  const cname = c => c.label || `Kafli ${c.n}`;
+  const ename = e => e.t || `Verkefni ${e.n}`;
 
   /* theory key "lidun" = this chapter, "1:lidun" = chapter 1 */
   function theoryFor(key, ch) {
@@ -22,7 +26,7 @@
       const [n, k] = key.split(':');
       const other = chByN(+n);
       const t = other && other.theory[k];
-      return t ? { ...t, t: `${t.t} (kafli ${n})` } : null;
+      return t ? { ...t, t: `${t.t} (${cname(other).toLowerCase()})` } : null;
     }
     return ch.theory[key] || null;
   }
@@ -39,6 +43,7 @@
 
   /* ---------- routing ---------- */
   function parseHash() {
+    if (location.hash === '#/f') return { ch: null, formulas: true };
     const m = location.hash.match(/^#\/(\d+)(?:\/(\d+))?(?:\/(u))?/);
     if (!m) return { ch: null };
     const ch = chByN(+m[1]);
@@ -57,7 +62,7 @@
 
   /* ---------- rendering ---------- */
   function render(scrollTop) {
-    if (!state.ch) renderHome(); else renderExercise();
+    if (state.formulas) renderFormulas(); else if (!state.ch) renderHome(); else renderExercise();
     renderJump();
     if (scrollTop) { window.scrollTo(0, 0); main.focus({ preventScroll: true }); }
   }
@@ -69,18 +74,29 @@
     const lastCh = store.get('lastCh', null);
     let h = `<h1>Veldu kafla</h1><ul class="chlist">`;
     for (const c of chapters) {
-      h += `<li><button data-ch="${c.n}"><span class="num">Kafli ${c.n}${c.n === lastCh ? ' · síðast opnað' : ''}</span>
+      h += `<li><button data-ch="${c.n}"><span class="num">${cname(c)}${c.n === lastCh ? ' · síðast opnað' : ''}</span>
         <span class="ttl">${c.title}</span><span class="cnt">${c.exercises.length} verkefni${c.draft ? ' · drög' : ''}</span></button></li>`;
     }
-    main.innerHTML = h + '</ul>';
+    h += '</ul>';
+    if (Book.formulas) h += `<p><button class="btn wide" id="goF">📋 Formúlublað</button></p>`;
+    main.innerHTML = h;
+    if (Book.formulas) $('goF').onclick = () => { location.hash = '#/f'; };
+  }
+
+  function renderFormulas() {
+    document.title = 'Formúlublað';
+    $('where').innerHTML = 'Formúlublað <small>Allar formúlur á einum stað</small>';
+    $('tabs').hidden = true; $('bottomNav').hidden = true;
+    main.innerHTML = `<h1>Formúlublað</h1>${Book.formulas}<p><button class="btn wide" id="back">◀ Til baka</button></p>`;
+    $('back').onclick = () => history.length > 1 ? history.back() : goHome();
   }
 
   function renderExercise() {
     const ch = state.ch, e = ch.exercises[state.idx], last = state.idx === ch.exercises.length - 1;
     const nextCh = chapters[chapters.indexOf(ch) + 1], prevCh = chapters[chapters.indexOf(ch) - 1];
     store.set('last_' + ch.n, state.idx); store.set('lastCh', ch.n);
-    document.title = `Kafli ${ch.n}, verkefni ${e.n}`;
-    $('where').innerHTML = `Kafli ${ch.n} · Verkefni ${e.n} <small>${state.idx + 1} af ${ch.exercises.length}${e.s ? ' · Æfing ' + e.s : ''}</small>`;
+    document.title = `${cname(ch)}, ${ename(e).toLowerCase()}`;
+    $('where').innerHTML = `${cname(ch)} · ${ename(e)} <small>${state.idx + 1} af ${ch.exercises.length}${e.s ? ' · ' + e.s : ''}</small>`;
     $('tabs').hidden = false; $('bottomNav').hidden = false;
     $('tabEx').setAttribute('aria-selected', state.view === 'ex');
     $('tabTh').setAttribute('aria-selected', state.view === 'th');
@@ -90,7 +106,7 @@
     $('next').textContent = last && nextCh ? 'Næsti kafli ▶' : 'Næsta ▶';
 
     if (state.view === 'ex') {
-      let h = `<h1>Verkefni ${e.n}</h1><div class="given">${e.g}</div>`;
+      let h = `<h1>${ename(e)}</h1><div class="given">${e.g}</div>`;
       if (e.tip) h += `<div class="tip"><b>Ábending:</b> ${e.tip}</div>`;
       h += '<ol class="parts">' + e.p.map((p, i) => {
         const show = `<button class="btn show" data-i="${i}">Sýna svar</button>`;
@@ -113,10 +129,10 @@
       const linked = (e.th || []).map(k => theoryFor(k, ch)).filter(Boolean);
       const linkedKeys = new Set((e.th || []).filter(k => !k.includes(':')));
       const others = Object.keys(ch.theory).filter(k => !linkedKeys.has(k)).map(k => ch.theory[k]);
-      let h = `<h1>Útskýring fyrir verkefni ${e.n}</h1>`;
+      let h = `<h1>Útskýring fyrir ${ename(e).toLowerCase()}</h1>`;
       h += linked.map((t, i) => `<details ${i === 0 ? 'open' : ''}><summary>${t.t}</summary><div>${t.h}</div></details>`).join('');
       if (others.length) {
-        h += `<h2 class="sub-h">Annað efni í kafla ${ch.n}</h2>`;
+        h += `<h2 class="sub-h">Annað efni í ${ch.label ? ch.label.toLowerCase() : 'kafla ' + ch.n}</h2>`;
         h += others.map(t => `<details><summary>${t.t}</summary><div>${t.h}</div></details>`).join('');
       }
       h += `<p><button class="btn wide" id="goEx">✏️ Aftur í verkefnið</button></p>`;
@@ -128,9 +144,9 @@
   function renderJump() {
     $('jumpWrap').hidden = !state.ch;
     if (!state.ch) return;
-    $('jumpTitle').textContent = `Verkefni í kafla ${state.ch.n}`;
+    $('jumpTitle').textContent = `Verkefni · ${cname(state.ch)}`;
     $('jump').innerHTML = state.ch.exercises.map((e, i) =>
-      `<button data-j="${i}" class="${i === state.idx ? 'cur' : ''}" aria-label="Verkefni ${e.n}">${e.n}</button>`).join('');
+      `<button data-j="${i}" class="${i === state.idx ? 'cur' : ''}" aria-label="${ename(e)}">${e.short || e.n}</button>`).join('');
   }
 
   /* ---------- events ---------- */
@@ -162,14 +178,18 @@
 
   /* Number answers: accept comma or point, spaces, and a rounding tolerance */
   function checkNum(i, p, box) {
-    const raw = $('in' + i).value.trim().replace(/\s/g, '').replace(',', '.').replace('−', '-');
+    const raw = $('in' + i).value.trim().replace(/\s/g, '').replace(',', '.').replace(/[−–]/g, '-')
+      .replace(/[·*x×]10\^/i, 'e');
     const fb = $('fb' + i);
     if (!raw) { fb.className = 'fb'; fb.textContent = 'Skrifaðu tölu fyrst.'; return; }
     const v = Number(raw);
     if (!isFinite(v)) { fb.className = 'fb wrong'; fb.textContent = 'Þetta er ekki tala.'; return; }
-    const ok = p.num === 0 ? Math.abs(v) < 1e-9 : Math.abs(v - p.num) <= Math.abs(p.num) * p.tol;
+    const close = w => p.num === 0 ? Math.abs(w) < 1e-9
+      : Math.abs(w - p.num) <= Math.max(Math.abs(p.num) * p.tol, p.half * 1.0001);
+    const ok = close(v) || (!p.sign && close(-v));
+    const flipped = p.sign && !ok && close(-v);
     fb.className = 'fb ' + (ok ? 'right' : 'wrong');
-    fb.textContent = ok ? '✓ Rétt!' : '✗ Ekki alveg. Reyndu aftur.';
+    fb.textContent = ok ? '✓ Rétt!' : flipped ? '✗ Rétt stærð en rangt formerki – athugaðu stefnuna.' : '✗ Ekki alveg. Reyndu aftur.';
     if (ok) { box.hidden = false; box.closest('li').querySelector('.show').textContent = 'Fela svar'; }
   }
   main.addEventListener('keydown', ev => {
@@ -194,6 +214,8 @@
   function closeMenu() { $('menu').hidden = true; $('openMenu').focus(); }
   $('openMenu').onclick = openMenu; $('closeMenu').onclick = closeMenu;
   $('goHome').onclick = () => { closeMenu(); goHome(); };
+  $('goForm').hidden = !Book.formulas;
+  $('goForm').onclick = () => { closeMenu(); location.hash = '#/f'; };
   $('jump').onclick = ev => { const b = ev.target.closest('button'); if (!b) return; closeMenu(); go(state.ch, +b.dataset.j); };
   $('fMinus').onclick = () => { font = Math.max(16, font - 2); applySettings(); };
   $('fPlus').onclick = () => { font = Math.min(44, font + 2); applySettings(); };

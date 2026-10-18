@@ -29,23 +29,25 @@ const chapters = ctx.Book.chapters;
 function checkHtml(where, h) {
   if (typeof h !== 'string') return err(where, 'is missing or not text');
   if (/undefined|NaN|\[object Object\]/.test(h)) err(where, 'contains "undefined"/"NaN" – a helper got a wrong argument');
-  for (const t of ['b', 'i', 'span', 'div', 'sup', 'sub', 'p', 'table']) {
+  for (const t of ['b', 'i', 'span', 'div', 'sup', 'sub', 'p', 'table', 'svg', 'text', 'tspan', 'details']) {
     const open = (h.match(new RegExp(`<${t}[\\s>]`, 'g')) || []).length;
     const close = (h.match(new RegExp(`</${t}>`, 'g')) || []).length;
     if (open !== close) err(where, `<${t}> opened ${open} times but closed ${close} times`);
   }
 }
 
+if (ctx.Book.formulas) checkHtml('Formúlublað', ctx.Book.formulas);
+
 const nums = new Set();
 for (const ch of chapters) {
-  const C = `Kafli ${ch.n}`;
+  const C = ch.label || `Kafli ${ch.n}`;
   if (nums.has(ch.n)) err(C, 'chapter number used twice');
   nums.add(ch.n);
   if (!ch.title) err(C, 'missing title');
   for (const [k, t] of Object.entries(ch.theory || {})) { if (!t.t) err(`${C} theory.${k}`, 'missing t (title)'); checkHtml(`${C} theory.${k}`, t.h); }
   const exNums = new Set();
   (ch.exercises || []).forEach(e => {
-    const E = `${C} verkefni ${e.n}`;
+    const E = `${C} ${e.t || 'verkefni ' + e.n}`;
     if (exNums.has(e.n)) err(E, 'exercise number used twice');
     exNums.add(e.n);
     checkHtml(E + ' g', e.g);
@@ -78,4 +80,4 @@ for (const f of loaded.filter(f => onDisk.includes(f)))
 const total = chapters.reduce((s, c) => s + c.exercises.length, 0);
 if (errors.length) { console.log(`✗ ${errors.length} problem(s):\n  ` + errors.join('\n  ')); process.exit(1); }
 console.log(`✓ ${chapters.length} chapters, ${total} exercises – all OK`);
-for (const c of chapters) console.log(`  Kafli ${c.n}: ${c.title} – ${c.exercises.length} verkefni, ${Object.keys(c.theory).length} útskýringar`);
+for (const c of chapters) console.log(`  ${c.label || 'Kafli ' + c.n}: ${c.title} – ${c.exercises.length} verkefni, ${Object.keys(c.theory).length} útskýringar`);
