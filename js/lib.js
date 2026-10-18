@@ -301,3 +301,96 @@ const MS = (base, sub) => `${M(base)}<sub>${sub}</sub>`;
 
 /* Marks an answer that is not in the book (written for the app – the teacher may want to check it) */
 const MINE = ' <span class="mine">(Svarið er ekki í bókinni.)</span>';
+
+/* ---------- chemistry ---------- */
+
+/* Isotope notation: ISO(13, 6, 'C') → ¹³₆C with the numbers stacked on the left */
+const ISO = (A, Z, sym) => `<span class="iso"><span class="az"><span>${A}</span><span>${Z}</span></span>${sym}</span>`;
+
+/* Electron configuration: EK('1s2 2s2 2p6') → 1s² 2s² 2p⁶,  EK('[Ne]3s1') → [Ne]3s¹ */
+const EK = s => `<span class="ek">${s.replace(/([spdf])(\d+)/g, '$1<sup>$2</sup>')}</span>`;
+
+/* Orbital boxes (spunaritháttur): ORB([['1s', [2]], ['2s', [2]], ['2p', [1, 1, 0]]])
+   each number is the electrons in one orbital: 2 = ↑↓, 1 = ↑, 0 = empty */
+const ORB = list => `<div class="orb">${list.map(([name, boxes]) =>
+  `<span class="orbg"><span class="orbb">${boxes.map(n => `<span>${n === 2 ? '↑↓' : n === 1 ? '↑' : '&nbsp;'}</span>`).join('')}</span><span class="orbn">${name}</span></span>`).join('')}</div>`;
+
+/* Lewis picture: LEWIS('C', 4) – the symbol with one dot per valence electron.
+   One dot on each side first (top, right, bottom, left), then a second dot on each side. */
+function LEWIS(sym, n) {
+  const w = sym.length > 1 ? 40 : 32;   // two-letter symbols are wider
+  const sides = [[0, -30, 1, 0], [w, 0, 0, 1], [0, 32, 1, 0], [-w, 0, 0, 1]];   // centre x, y and direction of a pair
+  let dots = '';
+  sides.forEach(([x, y, dx, dy], i) => {
+    const count = (n > i ? 1 : 0) + (n > i + 4 ? 1 : 0);
+    const at = count === 2 ? [[x - 7 * dx, y - 7 * dy], [x + 7 * dx, y + 7 * dy]] : count === 1 ? [[x, y]] : [];
+    for (const [cx, cy] of at) dots += `<circle cx="${50 + cx}" cy="${50 + cy}" r="4.5" fill="currentColor"/>`;
+  });
+  return `<svg class="lewis" viewBox="-6 0 112 100" role="img" aria-label="Lewis-mynd: ${sym} með ${n} ${n === 1 ? 'punkt' : 'punkta'}">` +
+    `<text x="50" y="62" font-size="${sym.length > 1 ? 30 : 34}" font-weight="700" fill="currentColor" text-anchor="middle">${sym}</text>${dots}</svg>`;
+}
+
+/* ---------- the periodic table ---------- */
+/* [symbol, Icelandic name, atomic mass] for Z = 1 … 118 (masses as on the course formula sheet) */
+const ELEMENTS = ('H Vetni 1,008|He Helíum 4,003|Li Litíum 6,941|Be Beryllíum 9,012|B Bór 10,811|C Kolefni 12,011|N Nitur 14,006|O Súrefni 15,999|F Flúor 18,998|Ne Neon 20,179|' +
+  'Na Natríum 22,989|Mg Magnesíum 24,305|Al Ál 26,982|Si Kísill 28,085|P Fosfór 30,974|S Brennisteinn 32,066|Cl Klór 35,453|Ar Argon 39,948|' +
+  'K Kalíum 39,098|Ca Kalsíum 40,078|Sc Skandíum 44,956|Ti Títan 47,880|V Vanadíum 50,942|Cr Króm 51,996|Mn Mangan 54,938|Fe Járn 55,847|Co Kóbalt 58,933|Ni Nikkel 58,693|Cu Kopar 63,546|Zn Sink 65,390|Ga Gallíum 69,723|Ge Germaníum 72,610|As Arsen 74,922|Se Selen 78,960|Br Bróm 79,904|Kr Krypton 83,800|' +
+  'Rb Rúbidíum 85,468|Sr Strontíum 87,620|Y Yttríum 88,906|Zr Sirkoníum 91,224|Nb Níóbíum 92,906|Mo Mólýbden 95,940|Tc Teknetíum (98)|Ru Rúteníum 101,07|Rh Ródíum 102,906|Pd Palladíum 106,42|Ag Silfur 107,868|Cd Kadmíum 112,411|In Indíum 114,818|Sn Tin 118,710|Sb Antimon 121,760|Te Tellúr 127,60|I Joð 126,904|Xe Xenon 131,29|' +
+  'Cs Sesíum 132,905|Ba Baríum 137,327|La Lantan 138,906|Ce Seríum 140,116|Pr Praseódým 140,908|Nd Neódým 144,24|Pm Prómetíum (145)|Sm Samaríum 150,36|Eu Evrópíum 151,964|Gd Gadólín 157,25|Tb Terbíum 158,925|Dy Dysprósíum 162,50|Ho Hólmíum 164,930|Er Erbíum 167,26|Tm Túlíum 168,934|Yb Ytterbíum 173,04|' +
+  'Lu Lútetíum 174,967|Hf Hafníum 178,49|Ta Tantal 180,948|W Volfram 183,84|Re Reníum 186,207|Os Osmíum 190,23|Ir Iridíum 192,22|Pt Platína 195,08|Au Gull 196,967|Hg Kvikasilfur 200,59|Tl Tallíum 204,383|Pb Blý 207,2|Bi Bismút 208,980|Po Pólón (209)|At Astat (210)|Rn Radon (222)|' +
+  'Fr Fransíum (223)|Ra Radíum (226)|Ac Aktiníum (227)|Th Þóríum 232,038|Pa Prótaktiníum 231,036|U Úran 238,029|Np Neptúníum (237)|Pu Plútóníum (244)|Am Ameríkíum (243)|Cm Kúríum (247)|Bk Berkelíum (247)|Cf Kaliforníum (251)|Es Einsteiníum (252)|Fm Fermíum (257)|Md Mendelevíum (258)|No Nóbelíum (259)|' +
+  'Lr Lawrensíum (262)|Rf Rutherfordíum (267)|Db Dubníum (268)|Sg Seaborgíum (271)|Bh Bohríum (272)|Hs Hassíum (270)|Mt Meitneríum (276)|Ds Darmstadtíum (281)|Rg Röntgeníum (280)|Cn Kóperníkíum (285)|Nh Nihoníum (284)|Fl Flerovíum (289)|Mc Moskovíum (288)|Lv Livermoríum (293)|Ts Tennessín (294)|Og Oganesson (294)')
+  .split('|').map(s => s.split(' '));
+
+/* where an element sits: [row, column]. Rows 1–7 are the periods; row 8 holds La–Yb and row 9 Ac–No
+   (taken out below the table, columns 4–17), as on the course formula sheet. */
+function ptPos(Z) {
+  if (Z === 1) return [1, 1];
+  if (Z === 2) return [1, 18];
+  const starts = [[87, 7], [55, 6], [37, 5], [19, 4], [11, 3], [3, 2]];
+  const [z0, per] = starts.find(([z]) => Z >= z), k = Z - z0;
+  if (per <= 3) return [per, k < 2 ? k + 1 : k + 11];
+  if (per <= 5) return [per, k + 1];
+  if (k < 2) return [per, k + 1];
+  if (k < 16) return [per + 2, k + 2];
+  return [per, k - 13];
+}
+const PT_SEMI = ['B', 'Si', 'Ge', 'As', 'Sb', 'Te', 'At'];
+const PT_NON = ['H', 'He', 'C', 'N', 'O', 'F', 'Ne', 'P', 'S', 'Cl', 'Ar', 'Se', 'Br', 'Kr', 'I', 'Xe', 'Rn'];
+const ptBlock = ([row, col]) => row > 7 ? 'f' : col <= 2 || (row === 1 && col === 18) ? 's' : col <= 12 ? 'd' : 'p';
+
+/* LOTU({ mode: 'hopar' | 'blokkir' | 'flokkar' | 'plain', mark: ['Fe', 'Na'], mass: true })
+   The table is wide, so it scrolls sideways on a phone. */
+function LOTU(o = {}) {
+  const W = 58, H = o.mass === false ? 52 : 64, X = c => 34 + (c - 1) * W, Y = r => 30 + (r - 1) * H + (r > 7 ? 18 : 0);
+  const mode = o.mode || 'plain', mark = new Set(o.mark || []);
+  const colour = {
+    hopar: (sym) => PT_SEMI.includes(sym) ? '--pt2' : PT_NON.includes(sym) ? '--pt3' : '--pt1',
+    blokkir: (sym, pos) => ({ s: '--pt1', p: '--pt3', d: '--pt2', f: '--pt4' })[ptBlock(pos)],
+    flokkar: (sym, [r, c]) => r > 7 ? '--pt4' : (c >= 3 && c <= 12) ? '--pt2' : '--pt3'
+  }[mode];
+  let s = `<svg class="pt" viewBox="0 0 ${34 + 18 * W + 6} ${Y(9) + H + 6}" role="img" aria-label="Lotukerfið">`;
+  for (let g = 1; g <= 18; g++) s += `<text x="${X(g) + W / 2}" y="22" font-size="15" fill="currentColor" text-anchor="middle">${g}</text>`;
+  for (let p = 1; p <= 7; p++) s += `<text x="16" y="${Y(p) + H / 2 + 5}" font-size="15" fill="currentColor" text-anchor="middle">${p}</text>`;
+  ELEMENTS.forEach(([sym, name, mass], i) => {
+    const Z = i + 1, pos = ptPos(Z), [r, c] = pos, m = mark.has(sym);
+    const fill = colour ? `var(${colour(sym, pos)})` : 'var(--card)';
+    s += `<g><title>${Z} ${name} (${sym}) ${mass} u</title>`;
+    s += `<rect x="${X(c) + 1}" y="${Y(r) + 1}" width="${W - 2}" height="${H - 2}" fill="${fill}" stroke="${m ? 'var(--accent)' : 'currentColor'}" stroke-width="${m ? 5 : 1}"/>`;
+    s += `<text x="${X(c) + 4}" y="${Y(r) + 14}" font-size="12" fill="currentColor">${Z}</text>`;
+    s += `<text x="${X(c) + W / 2}" y="${Y(r) + 36}" font-size="21" font-weight="700" fill="currentColor" text-anchor="middle">${sym}</text>`;
+    if (o.mass !== false) s += `<text x="${X(c) + W / 2}" y="${Y(r) + 55}" font-size="11" fill="currentColor" text-anchor="middle">${mass}</text>`;
+    s += '</g>';
+  });
+  s += `<text x="${X(3) + W / 2}" y="${Y(8) + H / 2 + 5}" font-size="13" fill="currentColor" text-anchor="middle">57–70</text>`;
+  s += `<text x="${X(3) + W / 2}" y="${Y(9) + H / 2 + 5}" font-size="13" fill="currentColor" text-anchor="middle">89–102</text>`;
+  s += '</svg>';
+  const legend = {
+    hopar: [['--pt1', 'Málmar'], ['--pt2', 'Málmungar'], ['--pt3', 'Málmleysingjar']],
+    blokkir: [['--pt1', 's-blokk'], ['--pt3', 'p-blokk'], ['--pt2', 'd-blokk'], ['--pt4', 'f-blokk']],
+    flokkar: [['--pt3', 'Aðalflokkar'], ['--pt2', 'Hliðarmálmar'], ['--pt4', 'Innri hliðarmálmar']]
+  }[mode];
+  return `<div class="ptwrap" tabindex="0" role="region" aria-label="Lotukerfið – strjúktu til hliðar">${s}</div>` +
+    (legend ? `<div class="legend">${legend.map(([v, t]) => `<span><i style="background:var(${v})"></i>${t}</span>`).join('')}</div>` : '') +
+    '<p class="mine">Strjúktu til hliðar til að sjá allt lotukerfið.</p>';
+}

@@ -9,10 +9,11 @@ is shown on its own, with large text (16–44 px), light / dark / yellow-on-blac
 |---|---|
 | Kafli 2 · Hreyfifræði – 7 explanations, 9 Spurningar, 16 Æfingar | `02 Hreyfifræði.pdf` |
 | Kafli 3 · Aflfræði – Kraftar – 6 explanations, 6 Spurningar, 11 Æfingar | `03 Aflfræði - Kraftar.pdf` |
+| Kafli 4 · Atómið og lotukerfið – 8 explanations, 43 Verkefni (answers from `Svör 4-1.kafli.pdf`) | `Inngangur að raunvisindum - 4-5. kafli.pdf` (only kafli 4 is in it) |
 | Upprifjun – 13 revision exercises (uses the explanations from kafli 2 and 3) | `Upprifjunarverkefni.pdf` |
-| Formúlublað – formulas, prefixes, polyatomic ions (button on the home screen and in the menu) | `Formúlublað_h26.pdf` |
+| Formúlublað – formulas, prefixes, polyatomic ions, periodic table (button on the home screen and in the menu) | `Formúlublað_h26.pdf` |
 
-Not yet on the site: `Svör úr kafla 1-1.pdf` and `Svör 4-1.kafli.pdf` (answer keys only – the chapters are missing).
+Not yet on the site: kafli 1 (only its answer key `Svör úr kafla 1-1.pdf` is here) and kafli 5 (not in the PDF despite its name).
 
 **What is not from the book:**
 
@@ -22,6 +23,26 @@ Not yet on the site: `Svör úr kafla 1-1.pdf` and `Svör 4-1.kafli.pdf` (answer
   Every final answer was recalculated and agrees with the book.
 - Figures are redrawn (not copied) so they follow the colour theme. Only figures needed for a question,
   plus a few that explain the theory, are included.
+
+**Mistakes corrected in kafli 4** (the app shows the corrected version):
+
+| Where | Source says | Correct |
+|---|---|---|
+| 4.1 text, Mynd 4.1 | atom ≈ 1,0·10⁻³ m (figure: 10⁻¹⁵ nm and 10⁻³ nm) | nucleus ≈ 10⁻¹⁵ m, atom ≈ 10⁻¹⁰ m |
+| Sýnidæmi 4.1 a | hydrogen is both metal and non-metal, an alkali metal | hydrogen is in group 1 but is a non-metal |
+| Sýnidæmi 4.4 | Ar(Cl) = 35,456 → 35,46 u | 35,4546 → 35,45 u |
+| 4.6 text | N: [He]2p³ | [He]2s²2p³ |
+| Tafla 4.4 | Li 1s¹2s¹, Ne [He]2s¹2p⁶, Na 1s¹2s¹2p⁶3s¹, Ar [He]3s¹3p⁶ | Li 1s²2s¹, Ne [He]2s²2p⁶, Na 1s²2s²2p⁶3s¹, Ar [Ne]3s²3p⁶ |
+| Tafla 4.5 | Li [He]1s¹ …, Na [Ne]2s¹ … | [He]2s¹ …, [Ne]3s¹ … |
+| 4.7 text | Lewis "á nítjándu öld" | early 20th century (1916) |
+| Sýnidæmi 4.8 | asks how many electrons to *lose*; parts d/e swapped (F/S) | "tapa eða bæta við sig", order matches |
+| Answer key 7e | kísill: "annarri lotu" | 3. lota |
+| Answer key 18 | last row: Al with 18 protons | Ar (sætistala 18) |
+| Answer key 11 | Uuq | Fl (flerovíum – its name since 2012) |
+
+The periodic table on the site uses today's symbols (Nh, Fl, Mc, Lv, Ts, Og) where the formula sheet has
+Uut, Uuq, …, and Cr = 51,996 (the formula sheet says 52,996). Answers to 29c (spunaritháttur) and 40
+(Lewis-myndir) are missing from the key and are marked *(Svarið er ekki í bókinni.)*.
 
 Small things fixed silently while transcribing: typos (*staðsetnigu*, *huturinn*, *Tákum*, *hraðnum*, …), and the
 table of contents of kafli 3 numbers its sections 2.1–2.8 instead of 3.1–3.8.
@@ -114,6 +135,11 @@ Everything from the maths site (`M`, `F`, `RT`, `STEPS`, `TB`, `DEF`, `RULE`, `A
 | `CH('2H2 + O2 -> 2H2O')` | 2H₂ + O₂ → 2H₂O (coefficients stay full size) |
 | `vecfig({ cols, rows, box, dot, arrows })` | force diagram on squared paper (see the comment in `lib.js`) |
 | `axisfig({ min, max, name, pts, arrows })` | position axis with points and displacement arrows |
+| `ISO(13, 6, 'C')` | isotope notation ¹³₆C |
+| `EK('1s2 2s2 2p6')`, `EK('[Ne]3s1')` | electron configuration with superscripts |
+| `ORB([['1s', [2]], ['2p', [1, 1, 0]]])` | orbital boxes with ↑↓ arrows (spunaritháttur) |
+| `LEWIS('C', 4)` | Lewis picture: symbol with 4 dots |
+| `LOTU({ mode: 'hopar', mark: ['Fe'] })` | periodic table (modes: plain, hopar, flokkar, blokkir); scrolls sideways |
 | `AR(90)` | small arrow pointing up (degrees: 0 right, 90 up, 180 left) – for multiple-choice options |
 | `IMG('mynd.png', 'alt text', 'Mynd 2.1')` | picture from `img/` with caption |
 

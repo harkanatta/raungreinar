@@ -50,4 +50,4 @@ ${TB(['Formúla', 'Heiti'], [
   [CH('CN^-'), 'Sýaníð'], [CH('SCN^-'), 'Þíósýaníð'], [CH('ClO2^-'), 'Klórít'], [CH('ClO3^-'), 'Klórat'],
   [CH('ClO4^-'), 'Perklórat'], [CH('SO4^{2-}'), 'Súlfat'], [CH('C2O4^{2-}'), 'Oxalat']
 ])}</div></details>
-<p class="mine">Lotukerfið er á formúlublaðinu en ekki hér – það er of stórt fyrir lítinn skjá.</p>`;
+<details><summary>Lotukerfið</summary><div>${LOTU({ mode: 'hopar' })}</div></details>`;
