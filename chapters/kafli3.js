@@ -96,25 +96,27 @@ ${EXMP('Sýnidæmi 3.7 · Lóð á vigt í lyftu', `Lóð, ${U('5,0', 'kg')}, er
 exercises: [
   /* ---------- 3.6 Spurningar (the book has no answers to these) ---------- */
   SP(1, { s: '3.6 Spurningar', th: ['kraftar'],
-    g: `Á myndinni verka þrír kraftar á hlut. Hvert stefnir <b>heildarkrafturinn</b>, teiknaður frá punktinum? Teldu reitina.
-    ${vecfig({ cols: 16, rows: 14, box: [6, 5, 4, 4], dot: [8, 7], alt: 'Þrír kraftar: T tvo reiti til hægri og tvo upp, F ýta þrjá reiti til hægri, F g fjóra reiti niður',
-      arrows: [{ from: [8, 5], to: [10, 3], l: 'T', at: [10.8, 3] }, { from: [6, 6], to: [9, 6], l: 'F', s: 'ýta', at: [10.6, 5.8] }, { from: [8, 9], to: [8, 13], l: 'F', s: 'g', at: [9, 13.4] }] })}`,
+    g: `Á myndinni verka þrír kraftar á hlut. <b>Teiknaðu heildarkraftinn</b> frá punktinum: settu örvaroddinn þar sem hann á að enda.`,
     tip: 'Leggðu saman reitina: hve marga til hægri/vinstri og hve marga upp/niður fer hver kraftur?',
-    p: [{ q: '', a: `${STEPS(`${T}: 2 til hægri, 2 upp`, `${MS('F', 'ýta')}: 3 til hægri`, `${Fg}: 4 niður`,
+    p: [drag('', { cols: 16, rows: 14, box: [6, 5, 4, 4], dot: [8, 7], alt: 'Þrír kraftar: T tvo reiti til hægri og tvo upp, F ýta þrjá reiti til hægri, F g fjóra reiti niður',
+        arrows: [{ from: [8, 5], to: [10, 3], l: 'T', at: [10.8, 3] }, { from: [6, 6], to: [9, 6], l: 'F', s: 'ýta', at: [10.6, 5.8] }, { from: [8, 9], to: [8, 13], l: 'F', s: 'g', at: [9, 13.4] }] },
+      [8, 7], [13, 9], ['F', 'heild'],
+      `${STEPS(`${T}: 2 til hægri, 2 upp`, `${MS('F', 'ýta')}: 3 til hægri`, `${Fg}: 4 niður`,
       `Samtals: <b>5 reiti til hægri og 2 reiti niður</b>`)}
       ${vecfig({ cols: 16, rows: 14, box: [6, 5, 4, 4], dot: [8, 7], alt: 'Svar: heildarkrafturinn fer 5 reiti til hægri og 2 niður frá punktinum',
         arrows: [{ from: [8, 5], to: [10, 3], l: 'T', at: [10.8, 3] }, { from: [6, 6], to: [9, 6], l: 'F', s: 'ýta', at: [10.6, 5.8] }, { from: [8, 9], to: [8, 13], l: 'F', s: 'g', at: [9, 13.4] },
-          { from: [8, 7], to: [13, 9], l: 'F', s: 'heild', ans: true, at: [13.2, 10.4] }] })}` + MINE }] }),
+          { from: [8, 7], to: [13, 9], l: 'F', s: 'heild', ans: true, at: [13.2, 10.4] }] })}` + MINE)] }),
   SP(2, { s: '3.6 Spurningar', th: ['kraftar'],
-    g: `Á myndinni eru tveir af þremur kröftum sem verka á hlut, ásamt heildarkraftinum. Hvert stefnir krafturinn sem vantar, ${VL('F', '2')}?
-    ${vecfig({ cols: 16, rows: 14, box: [6, 5, 4, 4], alt: 'F heild 4 reiti til vinstri og 5 upp, F 1 2 til hægri og 2 upp, F 3 3 til vinstri og 1 upp',
-      arrows: [{ from: [8, 7], to: [4, 2], l: 'F', s: 'heild', at: [4, 1.5] }, { from: [10, 7], to: [12, 5], l: 'F', s: '1', at: [12.8, 4.6] }, { from: [6, 7], to: [3, 6], l: 'F', s: '3', at: [2, 6.3] }] })}`,
+    g: `Á myndinni eru tveir af þremur kröftum sem verka á hlut, ásamt heildarkraftinum. <b>Teiknaðu kraftinn sem vantar</b>, ${VL('F', '2')}, frá miðju kassans.`,
     tip: `${VL('F', '2')} = ${VL('F', 'heild')} − ${VL('F', '1')} − ${VL('F', '3')}. Teldu reitina fyrir hvern kraft.`,
-    p: [{ q: '', a: `${STEPS('Teljum reiti: til hægri og upp er plús, til vinstri og niður er mínus.', `${Fh}: (−4, +5)`, `${MS('F', '1')}: (+2, +2)`, `${MS('F', '3')}: (−3, +1)`,
+    p: [drag('', { cols: 16, rows: 14, box: [6, 5, 4, 4], alt: 'F heild 4 reiti til vinstri og 5 upp, F 1 2 til hægri og 2 upp, F 3 3 til vinstri og 1 upp',
+        arrows: [{ from: [8, 7], to: [4, 2], l: 'F', s: 'heild', at: [4, 1.5] }, { from: [10, 7], to: [12, 5], l: 'F', s: '1', at: [12.8, 4.6] }, { from: [6, 7], to: [3, 6], l: 'F', s: '3', at: [2, 6.3] }] },
+      [8, 7], [5, 5], ['F', '2'],
+      `${STEPS('Teljum reiti: til hægri og upp er plús, til vinstri og niður er mínus.', `${Fh}: (−4, +5)`, `${MS('F', '1')}: (+2, +2)`, `${MS('F', '3')}: (−3, +1)`,
       `${MS('F', '2')} = ${Fh} − ${MS('F', '1')} − ${MS('F', '3')}: (−4 − 2 + 3, 5 − 2 − 1) = (−3, +2)`, `<b>${MS('F', '2')} fer 3 reiti til vinstri og 2 reiti upp</b>`)}
       ${vecfig({ cols: 16, rows: 14, box: [6, 5, 4, 4], alt: 'Svar: F 2 fer 3 reiti til vinstri og 2 upp',
         arrows: [{ from: [8, 7], to: [4, 2], l: 'F', s: 'heild', at: [4, 1.5] }, { from: [10, 7], to: [12, 5], l: 'F', s: '1', at: [12.8, 4.6] }, { from: [6, 7], to: [3, 6], l: 'F', s: '3', at: [2, 6.3] },
-          { from: [8, 7], to: [5, 5], l: 'F', s: '2', ans: true, at: [5.6, 4.4] }] })}` + MINE }] }),
+          { from: [8, 7], to: [5, 5], l: 'F', s: '2', ans: true, at: [5.6, 4.4] }] })}` + MINE)] }),
   SP(3, { s: '3.6 Spurningar', th: ['newton1'],
     g: `Ingvar togar kassa upp með bandi með ${U('100', 'N')} krafti. Þyngdarkrafturinn á kassann er líka ${U('100', 'N')}. Getur kassinn verið á hreyfingu, eða er hann örugglega kyrr?`,
     p: [mc('', ['Hann er örugglega kyrr', 'Hann getur verið á hreyfingu'], 1,

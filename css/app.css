@@ -189,3 +189,6 @@ svg.lewis{width:4.2em; height:4.2em; vertical-align:middle}
 svg.pt{display:block; width:62rem; max-width:none; height:auto; color:var(--fg)}
 .legend{display:flex; flex-wrap:wrap; gap:.3rem 1rem; font-size:.85rem}
 .legend i{display:inline-block; width:1.1em; height:1.1em; border:1px solid currentColor; vertical-align:-.15em; margin-right:.3em}
+.dragwrap{touch-action:none; cursor:crosshair; border-radius:.4rem; max-width:26rem}
+.dragwrap:focus-visible{outline:4px solid var(--accent); outline-offset:3px}
+.dragwrap svg.fig{margin:.3rem 0}

@@ -264,10 +264,27 @@ function vecfig(o) {
   if (o.box) { const [x, y, w, h] = o.box; s += `<rect x="${X(x)}" y="${X(y)}" width="${X(w)}" height="${X(h)}" fill="var(--box)" stroke="currentColor" stroke-width="2"/>`; }
   if (o.dot) s += `<circle cx="${X(o.dot[0])}" cy="${X(o.dot[1])}" r="5" fill="currentColor"/>`;
   for (const a of o.arrows || []) {
-    s += svgArrow(X(a.from[0]), X(a.from[1]), X(a.to[0]), X(a.to[1]), a.ans ? { color: 'var(--good)', dash: true, w: 5 } : {});
-    if (a.l) { const [lx, ly] = a.at || [a.to[0] + 0.6, a.to[1] - 0.3]; s += svgVecLabel(X(lx), X(ly), a.l, a.s); }
+    const zero = a.from[0] === a.to[0] && a.from[1] === a.to[1];
+    if (!zero) s += svgArrow(X(a.from[0]), X(a.from[1]), X(a.to[0]), X(a.to[1]),
+      a.ans ? { color: 'var(--good)', dash: true, w: 5 } : a.you ? { color: 'var(--ath-bd)', w: 6, head: 18 } : {});
+    if (a.l && !zero) { const [lx, ly] = a.at || [a.to[0] + 0.6, a.to[1] - 0.3]; s += svgVecLabel(X(lx), X(ly), a.l, a.s); }
   }
+  if (o.handle) s += `<circle cx="${X(o.handle[0])}" cy="${X(o.handle[1])}" r="15" fill="none" stroke="var(--ath-bd)" stroke-width="3" stroke-dasharray="5 4"/>`;
   return s + '</svg>';
+}
+
+/* Draw-the-arrow part: the student taps or drags on the grid to place the arrowhead, then presses Athuga.
+   drag(question, figure, start, target, [letter, subscript], explanation)
+   figure is a vecfig({...}) options object; start and target are grid points; the arrow is drawn from start. */
+const drag = (q, fig, start, target, label, why) =>
+  ({ q, drag: { fig, start, target, l: label[0], s: label[1] }, a: why });
+
+/* "3 til vinstri og 2 upp" for an arrow from a to b on the grid */
+function vecWords(a, b) {
+  const dx = b[0] - a[0], dy = a[1] - b[1], w = [];
+  if (dx) w.push(`${Math.abs(dx)} ${Math.abs(dx) === 1 ? 'reit' : 'reiti'} til ${dx > 0 ? 'hægri' : 'vinstri'}`);
+  if (dy) w.push(`${Math.abs(dy)} ${dy > 0 ? 'upp' : 'niður'}`);
+  return w.length ? w.join(' og ') : 'engin ör enn';
 }
 
 /* Position axis with marked points and displacement arrows (like Mynd 2.2).
