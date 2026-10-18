@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raungreinar – verkefni</title>
+<meta name="description" content="Verkefni og útskýringar, eitt verkefni í einu, með stóru letri.">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header>
+  <div class="where" id="where" aria-live="polite"></div>
+  <button class="iconbtn" id="openMenu" aria-label="Valmynd: kaflar, verkefni og stillingar">☰ Valmynd</button>
+</header>
+
+<div class="tabs" id="tabs" role="tablist">
+  <button role="tab" id="tabEx" aria-selected="true">✏️ Verkefni</button>
+  <button role="tab" id="tabTh" aria-selected="false">📖&nbsp;Útskýring</button>
+</div>
+
+<main id="main" tabindex="-1"></main>
+
+<nav class="bottom" id="bottomNav">
+  <button id="prev">◀ Fyrra</button>
+  <button id="next">Næsta ▶</button>
+</nav>
+
+<div class="sheet" id="menu" hidden role="dialog" aria-modal="true" aria-label="Valmynd">
+  <div class="inner">
+    <div class="setrow" style="justify-content:space-between">
+      <h1 style="margin:0">Valmynd</h1>
+      <button id="closeMenu" class="iconbtn" aria-label="Loka valmynd">✕ Loka</button>
+    </div>
+    <div id="jumpWrap">
+      <h2 id="jumpTitle">Verkefni í kaflanum</h2>
+      <div class="grid" id="jump"></div>
+    </div>
+    <h2>Kaflar</h2>
+    <div class="setrow"><button id="goHome">📚 Allir kaflar</button></div>
+    <h2>Leturstærð</h2>
+    <div class="setrow">
+      <button id="fMinus" aria-label="Minnka letur">A −</button>
+      <span id="fVal" style="min-width:4rem;text-align:center;font-weight:700"></span>
+      <button id="fPlus" aria-label="Stækka letur">A +</button>
+    </div>
+    <h2>Litir</h2>
+    <div class="setrow" id="themes">
+      <button data-t="auto">Sjálfvirkt</button>
+      <button data-t="light">Ljóst</button>
+      <button data-t="dark">Dökkt</button>
+      <button data-t="contrast">Gult á svörtu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Helpers first, then one file per chapter, then the app.
+     To add a chapter: create chapters/kafliN.js and add one line below. -->
+<script src="js/lib.js"></script>
+<script src="chapters/kafli1.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
