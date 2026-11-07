@@ -116,7 +116,7 @@
         else if (p.mc)
           btns = `<div class="mclist">${p.mc.map((o, k) => `<button class="btn mc" data-i="${i}" data-k="${k}"><span class="k">${LETTERS[k].toUpperCase()}</span>${o}</button>`).join('')}</div><div class="row">${show}</div>`;
         else if (p.num !== undefined)
-          btns = `<div class="numrow"><input id="in${i}" inputmode="${p.frac ? 'text' : 'decimal'}"${p.frac ? ' placeholder="t.d. 5/12"' : ''} autocomplete="off" aria-label="Svar${p.unit ? ' í ' + p.unit : ''}">${p.unit ? `<span class="unit">${up(p.unit)}</span>` : ''}
+          btns = `<div class="numrow"><input id="in${i}" inputmode="decimal" autocomplete="off" aria-label="Svar${p.unit ? ' í ' + p.unit : ''}">${p.unit ? `<span class="unit">${up(p.unit)}</span>` : ''}
             <button class="btn check" data-i="${i}">Athuga</button>${show}<span class="fb" id="fb${i}" aria-live="polite"></span></div>`;
         else btns = `<div class="row">${show}</div>`;
         return `<li>${p.l ? `<span class="plabel">(${p.l})</span>` : ''}<span class="q">${p.q}</span>
@@ -182,8 +182,7 @@
       .replace(/[·*x×]10\^/i, 'e');
     const fb = $('fb' + i);
     if (!raw) { fb.className = 'fb'; fb.textContent = 'Skrifaðu tölu fyrst.'; return; }
-    const fr = p.frac && raw.match(/^(-?[\d.]+)\/(-?[\d.]+)$/);
-    const v = fr ? fr[1] / fr[2] : Number(raw);
+    const v = Number(raw);
     if (!isFinite(v)) { fb.className = 'fb wrong'; fb.textContent = 'Þetta er ekki tala.'; return; }
     const close = w => p.num === 0 ? Math.abs(w) < 1e-9
       : Math.abs(w - p.num) <= Math.max(Math.abs(p.num) * p.tol, p.half * 1.0001);

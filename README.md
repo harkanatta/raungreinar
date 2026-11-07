@@ -10,14 +10,10 @@ is shown on its own, with large text (16–44 px), light / dark / yellow-on-blac
 | Kafli 2 · Hreyfifræði – 7 explanations, 9 Spurningar, 16 Æfingar | `02 Hreyfifræði.pdf` |
 | Kafli 3 · Aflfræði – Kraftar – 6 explanations, 6 Spurningar, 11 Æfingar | `03 Aflfræði - Kraftar.pdf` |
 | Kafli 4 · Atómið og lotukerfið – 8 explanations, 43 Verkefni (answers from `Svör 4-1.kafli.pdf`) | `Inngangur að raunvisindum - 4-5. kafli.pdf` (only kafli 4 is in it) |
-| Kafli 6 · Bókstafabrot – 2 explanations, 6 Dæmi (Æfing 6.1–6.2) | `Kafli 6.pdf` |
-| Kafli 7 · Jöfnur og ójöfnur – 7 explanations, 13 Dæmi (Æfing 7.1–7.5; * = harder) | `Kafli 7.pdf` |
 | Upprifjun – 13 revision exercises (uses the explanations from kafli 2 and 3) | `Upprifjunarverkefni.pdf` |
 | Formúlublað – formulas, prefixes, polyatomic ions, periodic table (button on the home screen and in the menu) | `Formúlublað_h26.pdf` |
 
 Not yet on the site: kafli 1 (only its answer key `Svör úr kafla 1-1.pdf` is here) and kafli 5 (not in the PDF despite its name).
-Kafli 6 and 7 are maths chapters (algebraic fractions, equations and inequalities); their worked steps are written for the app,
-and every final answer was recalculated (with SymPy).
 
 **What is not from the book:**
 
@@ -44,14 +40,6 @@ and every final answer was recalculated (with SymPy).
 | Answer key 18 | last row: Al with 18 protons | Ar (sætistala 18) |
 | Answer key 11 | Uuq | Fl (flerovíum – its name since 2012) |
 
-**Mistakes corrected in kafli 6 and 7:**
-
-| Where | Source says | Correct |
-|---|---|---|
-| Dæmi 7.1 | last line x = 1 | x = −1 (2x = −2) |
-| Dæmi 7.3 | x > −2, L = [−2, ∞[ | L = ]−2, ∞[ (−2 is not included) |
-| Answer key 6.2, 5(h) | nefnari … (x² − 3x + 9) | (x² + 3x + 9), since x³ − 27 = (x − 3)(x² + 3x + 9) |
-
 The periodic table on the site uses today's symbols (Nh, Fl, Mc, Lv, Ts, Og) where the formula sheet has
 Uut, Uuq, …, and Cr = 51,996 (the formula sheet says 52,996). Answers to 29c (spunaritháttur) and 40
 (Lewis-myndir) are missing from the key and are marked *(Svarið er ekki í bókinni.)*.
@@ -67,7 +55,7 @@ Each exercise part can be:
 - true/false (or Já/Nei, …): two buttons that say right away if the answer is right
 - **multiple choice**: options A, B, C… that say right away if the answer is right
 - **number answer**: the student types a number and presses **Athuga** or Enter. Accepted: `9,8` or `9.8`,
-  `2,0·10^5` or `2e5`, a fraction like `5/12` where the answer is exact (kafli 7), and anything that rounds to the book's answer or is within 2 %. If only the sign is
+  `2,0·10^5` or `2e5`, and anything that rounds to the book's answer or is within 2 %. If only the sign is
   wrong the app says so ("athugaðu stefnuna").
 
 The **Útskýring** tab holds the definitions and worked examples from the book that go with the exercise.
@@ -125,8 +113,7 @@ exercises: [
       mc('Question', ['option A', 'option B', 'option C'], 1, 'explanation'),    // 1 = B is right
       num('Question', 9.8, 'm/s^2', 'explanation'),                              // value with a point
       num('Question', -1.9, 'm/s^2', '', { sign: false, shown: '−1,9' }),        // either sign is OK
-      num('Question', 2.0e5, 'N', '', { tol: 0.03, shown: '2,0·10^5' }),         // own tolerance
-      num('x =', 5 / 12, '', '', { frac: true, html: F(5, 12), tol: 0.005 })     // exact; may be typed as 5/12
+      num('Question', 2.0e5, 'N', '', { tol: 0.03, shown: '2,0·10^5' })          // own tolerance
     ]) })
 ]
 ```
