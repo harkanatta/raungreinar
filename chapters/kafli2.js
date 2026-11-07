@@ -1,4 +1,5 @@
 /* Kafli 2 – Hreyfifræði. Transcribed from "02 Hreyfifræði.pdf" (15 pages, answers on p. 15).
+   Answers to Spurningar 2.6 from "Svör við spurningum - kafli 2.pdf".
    Worked solutions for Æfing are written for the app; the final answers are the book's. */
 Book.add((() => {
 const vm = MS('v', 'meðal'), am = MS('a', 'meðal');
@@ -132,19 +133,19 @@ exercises: [
   /* ---------- 2.6 Spurningar (the book has no answers to these) ---------- */
   SP(1, { s: '2.6 Spurningar', th: ['faersla'],
     g: 'Hver er munurinn á hugtökunum <b>færsla</b> og <b>fjarlægð</b> milli tveggja punkta?',
-    p: [{ q: '', a: `Færsla hefur bæði stærð og stefnu (formerki): ${M('Δx = x - x_0')}. Fjarlægð er aðeins stærðin, ${M('d = |Δx|')}, og er aldrei neikvæð.` + MINE }] }),
+    p: [{ q: '', a: `Færsla frá einum punkti til annars felur í sér upplýsingar um hversu langt er ferðast og í hvaða átt, þ.e. <b>færsla hefur bæði stærð og stefnu</b> (${M('Δx = x - x_0')}). Fjarlægð milli tveggja punkta segir okkur hver vegalengdin á milli þeirra er, þ.e. <b>fjarlægð felur eingöngu í sér upplýsingar um stærð</b> (${M('d = |Δx|')}).` }] }),
   SP(2, { s: '2.6 Spurningar', th: ['hradi'],
     g: 'Hver er munurinn á hugtökunum <b>hraði</b> og <b>ferð</b>?',
-    p: [{ q: '', a: 'Hraði hefur stærð og stefnu. Ferð er aðeins stærð hraðans – án stefnu.' + MINE }] }),
+    p: [{ q: '', a: 'Hraði felur í sér upplýsingar um hversu ört staðsetning hlutar breytist og í hvaða átt, þ.e. <b>hraði hefur bæði stærð og stefnu</b>. Ferð er annað orð yfir stærð hraðans – <b>ferð felur ekki í sér upplýsingar um stefnu</b>.' }] }),
   SP(3, { s: '2.6 Spurningar', th: ['hradi'],
     g: 'Orðið <b>hraðamælir</b> er ekki lýsandi fyrir bíla, a.m.k. ekki að mati eðlisfræðinga. Hvað ætti mælirinn frekar að heita?',
-    p: [{ q: '', a: '<b>Ferðamælir</b> – mælirinn sýnir aðeins stærðina, ekki í hvaða átt bíllinn fer.' + MINE }] }),
+    p: [{ q: '', a: 'Hraði felur í sér stærð (ferðina) og stefnu. Hraðamælir sýnir aðeins ferð en ekki stefnu. Kannski væri <b>ferðamælir</b> heppilegra orð.' }] }),
   SP(4, { s: '2.6 Spurningar', th: ['hradi'],
     g: `Ingvar keyrir ${U('100', 'km')} á ferðinni ${U('50', 'km/klst')} og aðra ${U('100', 'km')} á ferðinni ${U('100', 'km/klst')}. Ingvar heldur að meðalferðin hafi verið ${U('75', 'km/klst')} en svo er ekki. Útskýrðu hvers vegna – án þess að reikna.`,
-    p: [{ q: '', a: 'Hann er <b>lengur</b> að keyra hægari hlutann (2 klst) en þann hraðari (1 klst). Meðalferðin er því nær 50 en 100 – hún er minni en 75.' + MINE }] }),
+    p: [{ q: '', a: `Ingvar eyðir <b>meiri tíma</b> á ferðinni ${U('50', 'km/klst')} heldur en á ferðinni ${U('100', 'km/klst')} og meðalferðin er því nær ${U('50', 'km/klst')} heldur en ${U('100', 'km/klst')}. Við getum reiknað meðalferðina nákvæmlega: Ingvar fer ${U('200', 'km')} á ${U('3', 'klst')}, svo meðalferðin er um ${U('67', 'km/klst')}.` }] }),
   SP(5, { s: '2.6 Spurningar', th: ['hrodun'],
     g: 'Hvað má fullyrða um <b>ferð</b> hlutar ef hraði og hröðun hans hafa <b>sömu stefnu</b>?',
-    p: [mc('', ['Ferðin eykst', 'Ferðin minnkar', 'Ferðin er óbreytt'], 0, 'Hröðun í sömu stefnu og hraðinn eykur ferðina.' + MINE)] }),
+    p: [mc('', ['Ferðin eykst', 'Ferðin minnkar', 'Ferðin er óbreytt'], 0, 'Ef hraði og hröðun hafa sömu stefnu eykst ferðin.')] }),
   SP(6, { s: '2.6 Spurningar', th: ['jofnhrodun'],
     g: 'Bolta er sleppt fram af svölum á sama tíma og öðrum bolta er kastað beint upp í garðinum fyrir neðan. Hvaða fullyrðing lýsir hröðun boltanna best þegar þeir mætast?',
     p: [mc('', [
@@ -152,17 +153,17 @@ exercises: [
       'Hröðun boltans sem var kastað er meiri.',
       'Hröðun beggja er jafn stór en hefur mismunandi stefnu.',
       'Hröðun beggja bolta er nákvæmlega eins.',
-      'Við höfum ekki nægar upplýsingar.'], 3, `Báðir eru í frjálsu falli og hafa hröðunina ${U('9,80', 'm/s^2')} beint niður – alveg sama hvernig þeir hreyfast.` + MINE)] }),
+      'Við höfum ekki nægar upplýsingar.'], 3, `Báðir boltarnir hafa hröðunina ${U('9,80', 'm/s^2')} niður á við, þ.e. hröðun beggja boltanna er nákvæmlega eins.`)] }),
   SP(7, { s: '2.6 Spurningar', th: ['jofnhrodun', 'hradi'],
     g: 'Bolta er kastað beint upp með ákveðnum hraða og hann fellur svo aftur til jarðar.',
     p: P([
-      tf('Mun boltinn hafa sama <b>hraðann</b> á tveimur mismunandi tímapunktum?', false, 'Hröðunin stefnir alltaf niður, svo hraðinn (með formerki) minnkar jafnt og þétt allan tímann. Hann er aldrei sá sami tvisvar.' + MINE, ['Já', 'Nei']),
-      tf('Mun boltinn hafa sömu <b>ferðina</b> á tveimur mismunandi tímapunktum?', true, 'Í hverri hæð hefur hann sömu ferð á leið upp og á leið niður – en stefnan er gagnstæð.' + MINE, ['Já', 'Nei']),
-      { q: 'Hver verður minnsta ferð boltans í þessu ferli?', a: `<b>${U('0', 'm/s')}</b> – í efstu stöðu stoppar boltinn augnablik.` + MINE }
+      tf('Mun boltinn hafa sama <b>hraðann</b> á tveimur mismunandi tímapunktum?', false, `Hröðun boltans er allan tímann ${U('9,80', 'm/s^2')} niður á við. Hraði boltans er sífellt að breytast í sömu átt og mun því aldrei verða sá sami á tveimur ólíkum tímapunktum.`, ['Já', 'Nei']),
+      tf('Mun boltinn hafa sömu <b>ferðina</b> á tveimur mismunandi tímapunktum?', true, 'Ferð boltans minnkar á leið upp en eykst svo aftur á leið niður. Boltinn mun því vera á sömu ferð aftur á ólíkum tímapunktum.', ['Já', 'Nei']),
+      { q: 'Hver verður minnsta ferð boltans í þessu ferli?', a: `<b>${U('0', 'km/klst')}</b> – í efstu stöðu, einmitt þegar hann hættir að fara upp og byrjar að fara niður.` }
     ]) }),
   SP(8, { s: '2.6 Spurningar', th: ['jofnhrodun'],
     g: `Hlutur með jafna hröðun er í punktinum ${M('x_0')} á tilteknu augnabliki. Hvað má fullyrða um stefnu hraðans á þessu augnabliki ef hluturinn mun snúa aftur í sama punkt síðar?`,
-    p: [{ q: '', a: 'Hraðinn stefnir í <b>gagnstæða átt</b> við hröðunina. Hluturinn hægir á sér, snýr við og kemur til baka – eins og bolti sem kastað er upp.' + MINE }] }),
+    p: [{ q: '', a: 'Hraði hlutarins og hröðunin hafa <b>gagnstæðar stefnur</b>. (Hluturinn hægir á sér, snýr við og kemur til baka – eins og bolti sem kastað er upp.)' }] }),
   SP(9, { s: '2.6 Spurningar', th: ['faersla', 'hradi', 'hrodun'],
     g: 'Hvert þessara hugtaka felur í sér <b>stefnu</b>?',
     p: P([

@@ -1,4 +1,5 @@
 /* Upprifjunarverkefni – Hreyfifræði og kraftar. From "Upprifjunarverkefni.pdf" (answers "Meint svör" on p. 3).
+   All answers agree with the teacher's worked solutions in "Upprifjun_lausn.pdf".
    Uses the explanations from kafli 2 and 3. Worked solutions are written for the app. */
 Book.add((() => {
 const Fh = MS('F', 'heild'), Fg = MS('F', 'g');

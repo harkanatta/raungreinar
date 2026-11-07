@@ -17,7 +17,8 @@ Not yet on the site: kafli 1 (only its answer key `Svör úr kafla 1-1.pdf` is h
 
 **What is not from the book:**
 
-- The book has **no answers to Spurningar** (2.6 and 3.6). The app's answers to them are written for the app
+- The answers to **Spurningar 2.6** are the teacher's, from `Svör við spurningum - kafli 2.pdf`.
+  The book has **no answers to Spurningar 3.6**; the app's answers to them are written for the app
   and marked *(Svarið er ekki í bókinni.)* – the teacher may want to check them.
 - The book's Æfing answers are **final answers only**. The worked steps under each answer are written for the app.
   Every final answer was recalculated and agrees with the book.
