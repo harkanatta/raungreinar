@@ -218,14 +218,16 @@ const mc = (q, options, right, why) =>
    options: { tol: 0.02 } relative tolerance (default 2 %, so rounding differences count as right),
             { sign: false } accept the answer with either sign (when the direction is asked separately),
             { shown: '2,0·10^5' } how the answer is written in the answer box (default: the value).
-   Students may type 9,8 or 9.8, and 2,0·10^5 or 2e5. */
+            { frac: true, html: F(5, 12) } exact answer that may be typed as a fraction (5/12);
+              html is how it is shown in the answer box. Use a small tol, e.g. 0.005.
+   Students may type 9,8 or 9.8, and 2,0·10^5 or 2e5 (and 5/12 when frac is set). */
 const num = (q, value, unit, why, o = {}) => {
   const shown = o.shown || String(value).replace('.', ',');
   // an answer that rounds to the book's answer also counts: 1,85 is right when the book says 1,9
   const m = shown.replace(',', '.').replace('−', '-').match(/^-?\d+(?:\.(\d+))?(?:·10\^\{?(-?\d+)\}?)?$/);
-  const half = m ? 0.5 * Math.pow(10, -(m[1] || '').length + (+m[2] || 0)) : 0;
-  return { q, num: value, unit: unit || '', tol: o.tol ?? 0.02, half, sign: o.sign ?? true,
-    a: `<b>${U(shown, unit)}</b>` + (why ? ' — ' + why : '') };
+  const half = m && !o.frac ? 0.5 * Math.pow(10, -(m[1] || '').length + (+m[2] || 0)) : 0;
+  return { q, num: value, unit: unit || '', tol: o.tol ?? 0.02, half, sign: o.sign ?? true, frac: !!o.frac,
+    a: `<b>${o.html || U(shown, unit)}</b>` + (why ? ' — ' + why : '') };
 };
 
 /* ---------- physics figures (they follow the colour theme) ---------- */
