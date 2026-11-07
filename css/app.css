@@ -44,7 +44,7 @@
 html{font-size:24px; -webkit-text-size-adjust:100%}
 body{margin:0; background:var(--bg); color:var(--fg);
   font-family:"Atkinson Hyperlegible", Verdana, "Segoe UI", system-ui, sans-serif;
-  line-height:1.55; padding-bottom:5.5rem; overflow-wrap:break-word}
+  line-height:1.55; padding-bottom:4rem; overflow-wrap:break-word}
 i{font-family:Georgia, "Times New Roman", serif; font-style:italic}
 sup,sub{font-size:.7em; line-height:0}
 button{font:inherit; color:inherit; cursor:pointer}
@@ -136,10 +136,10 @@ table.tbl th{font-weight:700}
 
 /* bottom navigation */
 nav.bottom{position:fixed; left:0; right:0; bottom:0; background:var(--bg); border-top:2px solid var(--border);
-  display:flex; gap:.5rem; padding:.5rem 16px calc(.5rem + env(safe-area-inset-bottom))}
+  display:flex; justify-content:center; gap:.75rem; padding:6px 16px calc(6px + env(safe-area-inset-bottom))}
 nav.bottom[hidden]{display:none}
-nav.bottom button{flex:1; min-width:0; min-height:3.2rem; border-radius:.8rem; border:3px solid var(--accent);
-  background:var(--accent); color:var(--accent-fg); font-weight:700; font-size:min(1rem, 6.5vw); line-height:1.2}
+nav.bottom button{flex:0 1 auto; min-width:7em; min-height:44px; padding:.2rem 1em; border-radius:.6rem; border:2px solid var(--accent);
+  background:var(--accent); color:var(--accent-fg); font-weight:700; font-size:min(.9rem, 4.5vw); line-height:1.2}
 nav.bottom button:disabled{opacity:.35; cursor:default}
 
 /* menu sheet */
