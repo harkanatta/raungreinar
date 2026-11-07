@@ -50,4 +50,4 @@ ${TB(['Formúla', 'Heiti'], [
   [CH('CN^-'), 'Sýaníð'], [CH('SCN^-'), 'Þíósýaníð'], [CH('ClO2^-'), 'Klórít'], [CH('ClO3^-'), 'Klórat'],
   [CH('ClO4^-'), 'Perklórat'], [CH('SO4^{2-}'), 'Súlfat'], [CH('C2O4^{2-}'), 'Oxalat']
 ])}</div></details>
-<details><summary>Lotukerfið</summary><div>${LOTU({ mode: 'hopar' })}</div></details>`;
+<details><summary>Lotukerfið</summary><div>${LOTU({ mode: 'hopar', en: true })}</div></details>`;

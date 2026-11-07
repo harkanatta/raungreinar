@@ -361,8 +361,12 @@ const ptBlock = ([row, col]) => row > 7 ? 'f' : col <= 2 || (row === 1 && col ==
 
 /* LOTU({ mode: 'hopar' | 'blokkir' | 'flokkar' | 'plain', mark: ['Fe', 'Na'], mass: true })
    The table is wide, so it scrolls sideways on a phone. */
+/* Electronegativity (rafneikvæðni, Pauling) for Z = 1…102, from the school's table "Lotukerfi MA.pdf". '-' = not given. */
+const EN = '2.1 - 1.0 1.5 2.0 2.5 3.0 3.5 4.0 - 0.9 1.2 1.5 1.8 2.1 2.5 3.0 - 0.8 1.0 1.3 1.5 1.6 1.6 1.5 1.8 1.8 1.8 1.9 1.6 1.6 1.8 2.0 2.4 2.8 3.0 0.8 1.0 1.2 1.4 1.6 1.8 1.9 2.2 2.2 2.2 1.9 1.7 1.7 1.8 1.9 2.1 2.5 2.6 0.7 0.9 1.1 1.1 1.1 1.1 1.1 1.2 1.1 1.2 1.1 1.2 1.2 1.2 1.3 1.1 1.1 1.3 1.5 1.7 1.9 2.2 2.2 2.2 2.4 1.9 1.8 1.8 1.9 2.0 2.2 2.4 0.7 0.9 1.1 1.3 1.5 1.4 1.4 1.3 1.3 1.3 1.3 1.3 1.3 1.3 1.3 1.3'.split(' ');
+
 function LOTU(o = {}) {
-  const W = 58, H = o.mass === false ? 52 : 64, X = c => 34 + (c - 1) * W, Y = r => 30 + (r - 1) * H + (r > 7 ? 18 : 0);
+  /* o.en: show electronegativity under the mass */
+  const W = 58, H = o.mass === false ? 52 : o.en ? 78 : 64, X = c => 34 + (c - 1) * W, Y = r => 30 + (r - 1) * H + (r > 7 ? 18 : 0);
   const mode = o.mode || 'plain', mark = new Set(o.mark || []);
   const colour = {
     hopar: (sym) => PT_SEMI.includes(sym) ? '--pt2' : PT_NON.includes(sym) ? '--pt3' : '--pt1',
@@ -375,11 +379,13 @@ function LOTU(o = {}) {
   ELEMENTS.forEach(([sym, name, mass], i) => {
     const Z = i + 1, pos = ptPos(Z), [r, c] = pos, m = mark.has(sym);
     const fill = colour ? `var(${colour(sym, pos)})` : 'var(--card)';
-    s += `<g><title>${Z} ${name} (${sym}) ${mass} u</title>`;
+    const en = o.en && EN[i] && EN[i] !== '-' ? EN[i].replace('.', ',') : '';
+    s += `<g><title>${Z} ${name} (${sym}) ${mass} u${en ? ', rafneikvæðni ' + en : ''}</title>`;
     s += `<rect x="${X(c) + 1}" y="${Y(r) + 1}" width="${W - 2}" height="${H - 2}" fill="${fill}" stroke="${m ? 'var(--accent)' : 'currentColor'}" stroke-width="${m ? 5 : 1}"/>`;
     s += `<text x="${X(c) + 4}" y="${Y(r) + 14}" font-size="12" fill="currentColor">${Z}</text>`;
     s += `<text x="${X(c) + W / 2}" y="${Y(r) + 36}" font-size="21" font-weight="700" fill="currentColor" text-anchor="middle">${sym}</text>`;
     if (o.mass !== false) s += `<text x="${X(c) + W / 2}" y="${Y(r) + 55}" font-size="11" fill="currentColor" text-anchor="middle">${mass}</text>`;
+    if (en) s += `<text x="${X(c) + W / 2}" y="${Y(r) + 71}" font-size="12" font-weight="700" fill="currentColor" text-anchor="middle">${en}</text>`;
     s += '</g>';
   });
   s += `<text x="${X(3) + W / 2}" y="${Y(8) + H / 2 + 5}" font-size="13" fill="currentColor" text-anchor="middle">57–70</text>`;
@@ -392,5 +398,6 @@ function LOTU(o = {}) {
   }[mode];
   return `<div class="ptwrap" tabindex="0" role="region" aria-label="Lotukerfið – strjúktu til hliðar">${s}</div>` +
     (legend ? `<div class="legend">${legend.map(([v, t]) => `<span><i style="background:var(${v})"></i>${t}</span>`).join('')}</div>` : '') +
+    (o.en ? '<p class="mine">Í hverjum reit: sætistala, tákn, meðalmassi (u) og rafneikvæðni (feitletruð).</p>' : '') +
     '<p class="mine">Strjúktu til hliðar til að sjá allt lotukerfið.</p>';
 }

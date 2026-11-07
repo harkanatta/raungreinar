@@ -7,13 +7,18 @@ is shown on its own, with large text (16–44 px), light / dark / yellow-on-blac
 
 | On the site | Source (in `heimildir/`, not pushed – PDFs are in `.gitignore`) |
 |---|---|
+| Kafli 1 · Raunvísindi, tölur og einingar – 9 explanations, 40 Verkefni (answers from `Svör úr kafla 1-1.pdf`) | `Inngangur að raunvisindum - 1. kafli.pdf` |
 | Kafli 2 · Hreyfifræði – 7 explanations, 9 Spurningar, 16 Æfingar | `02 Hreyfifræði.pdf` |
 | Kafli 3 · Aflfræði – Kraftar – 6 explanations, 6 Spurningar, 11 Æfingar | `03 Aflfræði - Kraftar.pdf` |
 | Kafli 4 · Atómið og lotukerfið – 8 explanations, 43 Verkefni (answers from `Svör 4-1.kafli.pdf`) | `Inngangur að raunvisindum - 4-5. kafli.pdf` (only kafli 4 is in it) |
+| Kafli 5 · Jónir og jónaefni – 7 explanations, 15 Verkefni (no answer key – all answers written for the app) | `4-5. kafli nýtt.pdf` (pages 23–43) |
 | Upprifjun – 13 revision exercises (uses the explanations from kafli 2 and 3) | `Upprifjunarverkefni.pdf` |
+| Tímaverkefni 1 – worksheet, verkefni 1–10 (11–12 are lab tasks and left out) | `Tímaverkefni 1.pdf` |
 | Formúlublað – formulas, prefixes, polyatomic ions, periodic table (button on the home screen and in the menu) | `Formúlublað_h26.pdf` |
 
-Not yet on the site: kafli 1 (only its answer key `Svör úr kafla 1-1.pdf` is here) and kafli 5 (not in the PDF despite its name).
+Upprifjun is checked against the teacher's worked solutions (`Upprifjun_lausn.pdf`) – all answers agree.
+The periodic table on the formula sheet shows electronegativity (rafneikvæðni) from the school's table `Lotukerfi MA.pdf`.
+`4-5. kafli nýtt.pdf` has the same kafli 4 as before (the mistakes listed below are still in it).
 
 **What is not from the book:**
 
@@ -40,6 +45,34 @@ Not yet on the site: kafli 1 (only its answer key `Svör úr kafla 1-1.pdf` is h
 | Answer key 7e | kísill: "annarri lotu" | 3. lota |
 | Answer key 18 | last row: Al with 18 protons | Ar (sætistala 18) |
 | Answer key 11 | Uuq | Fl (flerovíum – its name since 2012) |
+
+**Mistakes corrected in kafli 1:**
+
+| Where | Source says | Correct |
+|---|---|---|
+| Sýnidæmi 1.1 | a) "1 míkrógramm, µm"; question d) in m but answer in L | µg; question d) in L |
+| Sýnidæmi 1.1 | forskeyti "í töflu 1.1" | tafla 1.2 |
+| Tafla 1.2 | rows misaligned (hektó 10⁻³, …) | tera 10¹² … píkó 10⁻¹² |
+| 1.6 text | metri: ljós á 1/299.792.**468** s | 1/299.792.458 s |
+| Tafla 1.4 | 1 g = 2,205 lb, 1 lb = 1000 kg, 1 mg = 1000 mg | 1 kg = 2,205 lb, 1 tonn = 1000 kg, 1 g = 1000 mg |
+| Tafla 1.5 | borðsalt 1,16 g/mL | 2,16 g/mL |
+| Sýnidæmi 1.14 | 200 + 273,15 | 20,00 + 273,15 |
+| 1.3 text | "sjá mynd 5.2" | mynd 1.4 |
+| Verkefni 3 | parts lettered g–k | a–e |
+| Answer key 29 | 1,38·10⁸ mL | 1,4·10⁸ mL (2,3 m has two significant figures) – both accepted |
+
+**Mistakes corrected in kafli 5:**
+
+| Where | Source says | Correct |
+|---|---|---|
+| Sýnidæmi 5.12 c | sesíum flúoríð: "eina kalíum jón … KF" | CsF |
+| Sýnidæmi 5.12 b | blý er hliðarmálmur | blý er málmur í 14. flokki (with variable charge) |
+| Sýnidæmi 5.6 | "töflu 3.2" | tafla 5.1 |
+| Box "Jónir 16. flokks" | repeats the 15. flokkur text | O²⁻ and S²⁻ (2−) |
+| Box "Jónir 17. flokks" | "Atríum (At)" | astatín |
+| 5.2 text | Al³⁺ "í 3. flokki" | 13. flokki |
+| 5.2 text | OH⁻ "hýdroxíðíð", HS⁻ "vetnis súlfíðíð" | hýdroxíð, vetnissúlfíð |
+| text | mynd 6.4, 6.5, 6.7, 3.9 | mynd 5.4, 5.5, 5.7, 5.9 |
 
 The periodic table on the site uses today's symbols (Nh, Fl, Mc, Lv, Ts, Og) where the formula sheet has
 Uut, Uuq, …, and Cr = 51,996 (the formula sheet says 52,996). Answers to 29c (spunaritháttur) and 40
